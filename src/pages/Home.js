@@ -3,9 +3,10 @@ import ActorGrid from '../components/actors/ActorGrid'
 import MainPage from '../components/MainPage'
 import { apiGet } from '../misc/apiGet'
 import ShowGrid from '../components/shows/ShowGrid'
+import { useLastQuery } from '../misc/custom-hooks'
 
 const Home = () => {
-    const [input,setInput] = useState('')
+    const [input,setInput] = useLastQuery('')
     const [results,setResults] = useState(null)
     const [searchOption,setSearchOption] = useState('shows')
     
@@ -26,6 +27,7 @@ const Home = () => {
     const textHandler = (e) =>{
         setInput(e.target.value )
     }
+
     const renderResult = () =>{
         if(results && results.length === 0){
             return <div>No results</div>
