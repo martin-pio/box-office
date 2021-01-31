@@ -4,6 +4,8 @@ import MainPage from '../components/MainPage'
 import { apiGet } from '../misc/apiGet'
 import ShowGrid from '../components/shows/ShowGrid'
 import { useLastQuery } from '../misc/custom-hooks'
+import { RadioInputsWrapper, SearchButtonWrapper, SearchInput } from './Home.Styled'
+import CustomRadio from '../components/shows/CustomRadio'
 
 const Home = () => {
     const [input,setInput] = useLastQuery('')
@@ -27,7 +29,11 @@ const Home = () => {
     const textHandler = (e) =>{
         setInput(e.target.value )
     }
-
+    const onKeyDown = (e) => {
+        if(e.target.value === 13){
+            clickHandler()
+        }
+    }
     const renderResult = () =>{
         if(results && results.length === 0){
             return <div>No results</div>
@@ -42,32 +48,30 @@ const Home = () => {
     }
     return(
             <MainPage>
-                <input type='text' value={input} placeholder='search something...' onChange={textHandler}></input>                
-                <div>
-                    <label htmlFor='show-search'>
-                    shows
-                    <input
-                        id = 'show-search'
-                        type = 'radio'
-                        value = 'shows'
-                        checked={isShowSearch}
-                        onChange={radioChange}
-                    >
-                    </input>
-                    </label>
-                    <label htmlFor='actor-search'>
-                    actors
-                    <input
-                        id = 'actor-search'
-                        type = 'radio'
-                        value = 'people'
-                        checked={!isShowSearch}
-                        onChange={radioChange}
-                    >
-                    </input>
-                    </label>
-                </div>
-                <button type='button' onClick={()=>clickHandler()}>Fetch</button>
+                <SearchInput type='text' value={input} placeholder='search something...' onKeyDown={onKeyDown} onChange={textHandler}></SearchInput>                
+                <RadioInputsWrapper>
+                    <div>
+                        <CustomRadio
+                            label='Shows'
+                            id = 'shows-search'
+                            value = 'shows'
+                            checked = {isShowSearch}
+                            onChange = {radioChange}
+                        />
+                    </div>
+                    <div>
+                        <CustomRadio
+                            label='Actors'
+                            id = 'actors-search'
+                            value = 'people'
+                            checked = {!isShowSearch}
+                            onChange = {radioChange}
+                        />
+                    </div>
+                </RadioInputsWrapper>
+                <SearchButtonWrapper>
+                    <button type='button' onClick={clickHandler}>Search</button>
+                </SearchButtonWrapper>
                 {renderResult()}
             </MainPage>
     )
